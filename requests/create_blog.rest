@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "url": "http://facebook",
-    "title": "facebook",
-    "password": "Mark Zuck"
+    "url": "discord",
+    "title": "how to use discord",
+    "password": "Discord owner"
 }
