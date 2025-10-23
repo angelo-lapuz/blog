@@ -126,6 +126,47 @@ describe('when there is initally one user in db', () => {
     assert(usernames.includes(newUser.username))
   })
 
+  test('creation of user fails because of username length < 3', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'a',
+      name: 'ronald',
+      password: 'ronald32',
+    }
+
+    const response = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+
+    assert(response.body.error.includes('username must be at least 3 characters'))
+  })
+
+  test('creation of user fails because of password length < 3', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'ronaldo',
+      name: 'ronald',
+      password: 'r',
+    }
+
+    const response = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+
+    assert(response.body.error.includes('password needs to be 3 or more characters'))
+  })
 })
 
 after(async () => {
